@@ -1,0 +1,41 @@
+name: Verificar projeto
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  executar:
+    name: Java ${{ matrix.java }} - ${{ matrix.sistema }}
+    runs-on: ${{ matrix.sistema }}
+    strategy:
+      fail-fast: false
+      matrix:
+        sistema: [ubuntu-latest, windows-latest]
+        java: ['17', '21']
+
+    steps:
+      - name: Obter projeto
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
+      - name: Compilar projeto
+        run: javac --release 17 -encoding UTF-8 -Xlint:all -Werror -d out src/Main.java src/entidades/Bicicleta.java src/entidades/Locacao.java src/entidades/StatusLocacao.java
+
+      - name: Executar fluxo completo
+        run: java -cp out Main
+
+      - name: Compilar testes
+        run: javac --release 17 -encoding UTF-8 -Xlint:all -Werror -cp out -d out test/LocacaoTest.java
+
+      - name: Verificar cobrança e estados
+        run: java -cp out LocacaoTest

@@ -62,6 +62,14 @@ Os getters de devolução e de valor total retornam `Optional`, já que esses da
 2. Em **File > Project Structure > Project**, selecione um **JDK 17 ou superior** como SDK do projeto.
 3. Abra `src/Main.java` e execute o método `main` pelo botão ao lado dele.
 
+A configuração de execução **Aluguel de bicicletas** também pode ser selecionada na barra superior do IntelliJ. Ela aponta para a classe `Main` do módulo `trab-2-poo`.
+
 O projeto não usa bibliotecas externas, banco de dados ou arquivos de configuração adicionais. A pasta `src` já está configurada como raiz dos fontes no módulo do IntelliJ.
 
 A classe `Main` simula uma retirada em **26/11/2026 às 09:00** e uma devolução às **11:15**, com uma bicicleta de R$ 12,00 por hora. As datas são fixas para permitir executar o fluxo inteiro sem esperar o tempo passar. Primeiro ela exibe a locação em andamento, depois consulta os R$ 36,00 previstos sem mudar o estado e, por último, registra a devolução e mostra a locação finalizada. O UUID muda a cada execução.
+
+## Verificação
+
+O GitHub Actions compila o projeto e executa o `Main` no Windows e no Linux, com Java 17 e Java 21. A compilação usa `--release 17` e trata avisos como erros. Os resultados ficam na aba **Actions** do repositório.
+
+O arquivo `test/LocacaoTest.java` verifica a cobrança mínima, frações de hora, valores decimais, virada de dia, dados obrigatórios e as mudanças de estado. Ele também confere que consultar o preço não altera a locação e que devoluções inválidas não modificam o histórico. Os testes não usam bibliotecas externas e ficam fora da pasta `src`.
